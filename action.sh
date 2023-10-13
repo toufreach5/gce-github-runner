@@ -193,7 +193,6 @@ function start_vm {
   echo "The new GCE VM will be ${VM_ID}"
 
   startup_script="
-        apt-get update && apt-get install -y git
 	# Create a systemd service in charge of shutting down the machine once the workflow has finished
 	cat <<-EOF > /etc/systemd/system/shutdown.sh
 	#!/bin/sh
@@ -254,6 +253,7 @@ function start_vm {
       $startup_script"
     else
       startup_script="#!/bin/bash
+      apt-get update && apt-get install -y git
       mkdir /actions-runner
       cd /actions-runner
       curl -o actions-runner-linux-x64-${runner_ver}.tar.gz -L https://github.com/actions/runner/releases/download/v${runner_ver}/actions-runner-linux-x64-${runner_ver}.tar.gz
