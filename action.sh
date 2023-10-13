@@ -168,12 +168,13 @@ function start_vm {
     echo "Will authenticate gcloud."
     gcloud_auth
   fi
-
+  echo "${GITHUB_REPOSITORY}"
   RUNNER_TOKEN=$(curl -S -s -XPOST \
       -H "authorization: Bearer ${token}" \
       https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runners/registration-token |\
       jq -r .token)
   echo "✅ Successfully got the GitHub Runner registration token"
+  echo "$RUNNER_TOKEN"
 
   VM_ID="gce-gh-runner-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
   service_account_flag=$([[ -z "${runner_service_account}" ]] || echo "--service-account=${runner_service_account}")
