@@ -175,7 +175,7 @@ function start_vm {
   echo "✅ Successfully got the GitHub Runner registration token"
 
 
-  VM_ID="gce-gh-runner-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+  VM_ID="gce-gh-runner-${GITHUB_WORKFLOW}-${GITHUB_RUN_NUMBER}"
   service_account_flag=$([[ -z "${runner_service_account}" ]] || echo "--service-account=${runner_service_account}")
   image_project_flag=$([[ -z "${image_project}" ]] || echo "--image-project=${image_project}")
   image_flag=$([[ -z "${image}" ]] || echo "--image=${image}")
@@ -227,8 +227,8 @@ function start_vm {
 	./svc.sh install && \\
 	./svc.sh start && \\
 	gcloud compute instances add-labels ${VM_ID} --zone=${machine_zone} --labels=gh_ready=1
-	# 3 days represents the max workflow runtime. This will shutdown the instance if everything else fails.
-	nohup sh -c \"sleep 3d && gcloud --quiet compute instances delete ${VM_ID} --zone=${machine_zone}\" > /dev/null &
+	# 2 days represents the max workflow runtime. This will shutdown the instance if everything else fails.
+	nohup sh -c \"sleep 2h && gcloud --quiet compute instances delete ${VM_ID} --zone=${machine_zone}\" > /dev/null &
   "
 
   if $actions_preinstalled ; then
@@ -289,6 +289,9 @@ function start_vm {
 
   gcloud compute instances create ${VM_ID} \
     --zone=${machine_zone} \
+    --provisioning-model=SPOT \
+    --instance-termination-action=DELETE \
+    --max-run-duration=0.4
     ${disk_size_flag} \
     ${boot_disk_type_flag} \
     --machine-type=${machine_type} \
