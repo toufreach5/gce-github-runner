@@ -168,13 +168,12 @@ function start_vm {
     echo "Will authenticate gcloud."
     gcloud_auth
   fi
-  echo "${GITHUB_REPOSITORY}"
   RUNNER_TOKEN=$(curl -S -s -XPOST \
       -H "authorization: Bearer ${token}" \
       https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runners/registration-token |\
       jq -r .token)
   echo "✅ Successfully got the GitHub Runner registration token"
-  echo "$RUNNER_TOKEN"
+
 
   VM_ID="gce-gh-runner-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
   service_account_flag=$([[ -z "${runner_service_account}" ]] || echo "--service-account=${runner_service_account}")
@@ -224,7 +223,7 @@ function start_vm {
 	# See: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/running-scripts-before-or-after-a-job
 	echo "ACTIONS_RUNNER_HOOK_JOB_COMPLETED=/usr/bin/gce_runner_shutdown.sh" >.env
 	gcloud compute instances add-labels ${VM_ID} --zone=${machine_zone} --labels=gh_ready=0 && \\
-	RUNNER_ALLOW_RUNASROOT=1 ./config.sh --url https://github.com/ReachFive/${GITHUB_REPOSITORY} --token ${RUNNER_TOKEN} --labels ${VM_ID} --unattended ${ephemeral_flag} --disableupdate && \\
+	RUNNER_ALLOW_RUNASROOT=1 ./config.sh --url https://github.com/${GITHUB_REPOSITORY} --token ${RUNNER_TOKEN} --labels ${VM_ID} --unattended ${ephemeral_flag} --runnergroup default --disableupdate && \\
 	./svc.sh install && \\
 	./svc.sh start && \\
 	gcloud compute instances add-labels ${VM_ID} --zone=${machine_zone} --labels=gh_ready=1
