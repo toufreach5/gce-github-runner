@@ -193,6 +193,7 @@ function start_vm {
   echo "The new GCE VM will be ${VM_ID}"
 
   startup_script="
+        apt-get update && apt-get install -y git
 	# Create a systemd service in charge of shutting down the machine once the workflow has finished
 	cat <<-EOF > /etc/systemd/system/shutdown.sh
 	#!/bin/sh
