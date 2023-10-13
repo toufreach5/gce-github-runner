@@ -292,7 +292,7 @@ function start_vm {
     --zone=${machine_zone} \
     --provisioning-model=SPOT \
     --instance-termination-action=DELETE \
-    --max-run-duration=1620s
+    --max-run-duration=1620s \
     ${disk_size_flag} \
     ${boot_disk_type_flag} \
     --machine-type=${machine_type} \
@@ -301,7 +301,6 @@ function start_vm {
     ${image_project_flag} \
     ${image_flag} \
     ${image_family_flag} \
-    ${preemptible_flag} \
     ${no_external_address_flag} \
     ${subnet_flag} \
     ${accelerator} \
