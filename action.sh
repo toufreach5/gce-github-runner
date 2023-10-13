@@ -285,9 +285,10 @@ function start_vm {
   }
   gh_repo_owner="$(truncate_to_label "${GITHUB_REPOSITORY_OWNER}")"
   gh_repo="$(truncate_to_label "${GITHUB_REPOSITORY##*/}")"
-  gh_run_id="${GITHUB_RUN_ID}"
+  gh_run_id="${GITHUB_RUN_NUMBER}"
+  gh_workflow="${GITHUB_WORKFLOW}"
 
-  gcloud compute instances create ${VM_ID} \
+  gcloud beta compute instances create ${VM_ID} \
     --zone=${machine_zone} \
     --provisioning-model=SPOT \
     --instance-termination-action=DELETE \
