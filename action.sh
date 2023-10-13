@@ -161,6 +161,7 @@ function gcloud_auth {
 }
 
 function start_vm {
+  apt-get update && apt-get install -y git
   echo "Starting GCE VM ..."
   if [[ -z "${service_account_key}" ]] || [[ -z "${project_id}" ]]; then
     echo "Won't authenticate gcloud. If you wish to authenticate gcloud provide both service_account_key and project_id."
@@ -253,7 +254,6 @@ function start_vm {
       $startup_script"
     else
       startup_script="#!/bin/bash
-      apt-get update && apt-get install -y git
       mkdir /actions-runner
       cd /actions-runner
       curl -o actions-runner-linux-x64-${runner_ver}.tar.gz -L https://github.com/actions/runner/releases/download/v${runner_ver}/actions-runner-linux-x64-${runner_ver}.tar.gz
