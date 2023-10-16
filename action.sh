@@ -196,9 +196,7 @@ function start_vm {
   maintenance_policy_flag=$([[ -z "${maintenance_policy_terminate}"  ]] || echo "--maintenance-policy=TERMINATE" )
 
   echo "The new GCE VM will be ${VM_ID}"
-
-  echo "${custom_startup_script}"
-
+  
   infra_startup_script="
 	# Create a systemd service in charge of shutting down the machine once the workflow has finished
 	cat <<-EOF > /etc/systemd/system/shutdown.sh
