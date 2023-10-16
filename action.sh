@@ -196,6 +196,8 @@ function start_vm {
 
   echo "The new GCE VM will be ${VM_ID}"
 
+  echo "${custom_startup_script}"
+
   infra_startup_script="
 	# Create a systemd service in charge of shutting down the machine once the workflow has finished
 	cat <<-EOF > /etc/systemd/system/shutdown.sh
@@ -262,7 +264,7 @@ function start_vm {
       curl -o actions-runner-linux-x64-${runner_ver}.tar.gz -L https://github.com/actions/runner/releases/download/v${runner_ver}/actions-runner-linux-x64-${runner_ver}.tar.gz
       tar xzf ./actions-runner-linux-x64-${runner_ver}.tar.gz
       ./bin/installdependencies.sh && \\
-      $custom_startup_script && \\
+      ${custom_startup_script} && \\
       $infra_startup_script"
     fi
   fi
