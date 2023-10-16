@@ -40,6 +40,7 @@ actions_preinstalled=
 maintenance_policy_terminate=
 arm=
 accelerator=
+custom_startup_script=
 
 OPTLIND=1
 while getopts_long :h opt \
