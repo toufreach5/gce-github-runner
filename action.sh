@@ -67,6 +67,7 @@ while getopts_long :h opt \
   arm required_argument \
   maintenance_policy_terminate optional_argument \
   accelerator optional_argument \
+  custom_startup_script optional_argument \
   help no_argument "" "$@"
 do
   case "$opt" in
@@ -141,6 +142,9 @@ do
       ;;
     accelerator)
       accelerator=$OPTLARG
+      ;;
+    custom_startup_script)
+      custom_startup_script=$OPTLARG
       ;;      
     h|help)
       usage
@@ -192,7 +196,7 @@ function start_vm {
 
   echo "The new GCE VM will be ${VM_ID}"
 
-  startup_script="
+  infra_startup_script="
 	# Create a systemd service in charge of shutting down the machine once the workflow has finished
 	cat <<-EOF > /etc/systemd/system/shutdown.sh
 	#!/bin/sh
@@ -258,7 +262,8 @@ function start_vm {
       curl -o actions-runner-linux-x64-${runner_ver}.tar.gz -L https://github.com/actions/runner/releases/download/v${runner_ver}/actions-runner-linux-x64-${runner_ver}.tar.gz
       tar xzf ./actions-runner-linux-x64-${runner_ver}.tar.gz
       ./bin/installdependencies.sh && \\
-      $startup_script"
+      $custom_startup_script && \\
+      $infra_startup_script"
     fi
   fi
   
