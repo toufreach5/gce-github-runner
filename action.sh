@@ -194,10 +194,9 @@ function start_vm {
   subnet_flag=$([[ ! -z "${subnet}"  ]] && echo "--subnet=${subnet}" || echo "")
   accelerator=$([[ ! -z "${accelerator}"  ]] && echo "--accelerator=${accelerator} --maintenance-policy=TERMINATE" || echo "")
   maintenance_policy_flag=$([[ -z "${maintenance_policy_terminate}"  ]] || echo "--maintenance-policy=TERMINATE" )
+  custom_startup_script=$([[ ! -z "${custom_startup_script}"  ]] && echo "custom_startup_script=${custom_startup_script}" || echo "" )
 
   echo "The new GCE VM will be ${VM_ID}"
-
-  echo -e "${custom_startup_script}"
 
   infra_startup_script="
 	# Create a systemd service in charge of shutting down the machine once the workflow has finished
