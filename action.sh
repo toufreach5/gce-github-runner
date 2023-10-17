@@ -264,7 +264,7 @@ function start_vm {
       curl -o actions-runner-linux-x64-${runner_ver}.tar.gz -L https://github.com/actions/runner/releases/download/v${runner_ver}/actions-runner-linux-x64-${runner_ver}.tar.gz
       tar xzf ./actions-runner-linux-x64-${runner_ver}.tar.gz
       ./bin/installdependencies.sh && \\
-      if [[ -z "${custom_startup_script}"  ]]; then
+      if [[ -z \"${custom_startup_script}\"  ]]; then
       ${custom_startup_script} && \\
       fi
       $infra_startup_script"
