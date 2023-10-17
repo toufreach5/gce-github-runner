@@ -194,7 +194,7 @@ function start_vm {
   subnet_flag=$([[ ! -z "${subnet}"  ]] && echo "--subnet=${subnet}" || echo "")
   accelerator=$([[ ! -z "${accelerator}"  ]] && echo "--accelerator=${accelerator} --maintenance-policy=TERMINATE" || echo "")
   maintenance_policy_flag=$([[ -z "${maintenance_policy_terminate}"  ]] || echo "--maintenance-policy=TERMINATE" )
-  custom_startup_script=$([[ -z "${custom_startup_script}"  ]] && echo "custom_startup_script=${custom_startup_script}" || echo "" )
+  custom_startup_script=$([[ ! -z "${custom_startup_script}"  ]] && echo "${custom_startup_script} && \\" || echo "" )
 
   echo "The new GCE VM will be ${VM_ID}"
 
@@ -264,9 +264,7 @@ function start_vm {
       curl -o actions-runner-linux-x64-${runner_ver}.tar.gz -L https://github.com/actions/runner/releases/download/v${runner_ver}/actions-runner-linux-x64-${runner_ver}.tar.gz
       tar xzf ./actions-runner-linux-x64-${runner_ver}.tar.gz
       ./bin/installdependencies.sh && \\
-      if [[ -z "${custom_startup_script}"  ]]; then
-      ${custom_startup_script} && \\
-      fi
+      ${custom_startup_script}
       $infra_startup_script"
     fi
   fi
