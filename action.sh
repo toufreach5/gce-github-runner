@@ -306,7 +306,7 @@ function start_vm {
     --zone=${machine_zone} \
     --provisioning-model=SPOT \
     --instance-termination-action=DELETE \
-    --max-run-duration=1620s \
+    --max-run-duration=2700s \
     ${disk_size_flag} \
     ${boot_disk_type_flag} \
     --machine-type=${machine_type} \
